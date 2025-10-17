@@ -1,5 +1,13 @@
 import SwiftUI
 
+#if canImport(UIKit)
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+#endif
+
 struct ContentView: View {
     @State private var hobbies = ""
     @Environment(\.colorScheme) var colorScheme
@@ -43,15 +51,25 @@ struct ContentView: View {
                     }
                     .padding(.horizontal, 30)
                     
-                    Button(action: {}) {  Text("Confirm") .font(.title3.bold()) .foregroundColor(.white) .padding(.vertical, 12) .padding(.horizontal, 50) .background(Color.blue) .cornerRadius(10) .shadow(radius: 5) } .padding(.top, 20)
+                    Button(action: {}) {  Text("Confirm")
+                        .font(.title3.bold())
+                        .foregroundColor(.white) .padding(.vertical, 12) .padding(.horizontal, 50)
+                        .background(Color.blue)
+                        .cornerRadius(10)
+                        .shadow(radius: 5) }
+                        .padding(.top, 20)
                     
                     
                     Spacer(minLength: 50)
                 }
-            }
+            }.scrollBounceBehavior(.basedOnSize)
+        }
+        .onTapGesture {
+            hideKeyboard()
         }
     }
 }
+
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
